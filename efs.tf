@@ -30,7 +30,7 @@ resource "aws_efs_file_system" "ACS-efs" {
   kms_key_id = aws_kms_key.ACS-kms.arn
 
   tags = {
-    Name = "ACS-efs"
+    Name = "ACS-EFS"
   }
 }
 
