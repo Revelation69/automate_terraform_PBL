@@ -32,8 +32,6 @@ resource "random_shuffle" "az_list" {
   input = data.aws_availability_zones.available-bastion.names
 }
 
-
-
 resource "aws_launch_template" "bastion-launch-template" {
   name                   = "bastion-launch-template"
   instance_type          = "t2.micro"
@@ -67,8 +65,6 @@ resource "aws_launch_template" "bastion-launch-template" {
 
 
 # ---- Autoscaling for bastion  hosts
-
-
 resource "aws_autoscaling_group" "bastion-asg" {
   name                      = "bastion-asg"
   max_size                  = 2
@@ -124,8 +120,7 @@ resource "aws_launch_template" "nginx-launch-template" {
 }
 
 
-# ------ Autoscslaling group for reverse proxy nginx ---------
-
+# ------ Autoscaling group for reverse proxy nginx ---------
 resource "aws_autoscaling_group" "nginx-asg" {
   name                      = "nginx-asg"
   max_size                  = 2

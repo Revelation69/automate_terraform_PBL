@@ -9,7 +9,7 @@ resource "aws_lb" "ext-alb" {
   subnets         = [aws_subnet.public[0].id, aws_subnet.public[1].id]
 
   tags = {
-    Name = "ext-alb"
+    Name = "ACS-EXT-ALB"
   }
 
   ip_address_type    = "ipv4"
@@ -34,7 +34,6 @@ resource "aws_lb_target_group" "nginx-tgt" {
 }
 
 #--- create a listener for the load balancer
-
 resource "aws_lb_listener" "nginx-listner" {
   load_balancer_arn = aws_lb.ext-alb.arn
   port              = 443
@@ -54,13 +53,11 @@ resource "aws_lb_listener" "nginx-listner" {
 resource "aws_lb" "int-alb" {
   name     = "int-alb"
   internal = true
-
   security_groups = [aws_security_group.int-alb-sg.id]
-
   subnets = [aws_subnet.private[0].id, aws_subnet.private[1].id]
 
   tags = {
-    Name = "int-alb"
+    Name = "ACS-INT-ALB"
   }
 
   ip_address_type    = "ipv4"

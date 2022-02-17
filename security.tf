@@ -130,6 +130,15 @@ resource "aws_security_group_rule" "inbound-ialb-https" {
   security_group_id        = aws_security_group.int-alb-sg.id
 }
 
+resource "aws_security_group_rule" "inbound-ialb-http-80" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.nginx-sg.id
+  security_group_id        = aws_security_group.int-alb-sg.id
+}
+
 # Security group for webservers, to have access only from the internal load balancer and bastion instance
 resource "aws_security_group" "webserver-sg" {
   name   = "webserver-sg"
@@ -151,6 +160,15 @@ resource "aws_security_group_rule" "inbound-webserver-https" {
   type                     = "ingress"
   from_port                = 443
   to_port                  = 443
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.int-alb-sg.id
+  security_group_id        = aws_security_group.webserver-sg.id
+}
+
+resource "aws_security_group_rule" "inbound-webserver-http-80" {
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
   protocol                 = "tcp"
   source_security_group_id = aws_security_group.int-alb-sg.id
   security_group_id        = aws_security_group.webserver-sg.id
