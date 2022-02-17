@@ -28,7 +28,7 @@ resource "aws_kms_alias" "alias" {
 # create DB subnet group from the private subnets
 resource "aws_db_subnet_group" "ACS-rds" {
   name       = "acs-rds"
-  subnet_ids = [aws_subnet.private[2].id, aws_subnet.private[3].id]
+  subnet_ids = var.private_subnets
 
   tags = {
     Name = "ACS-RDS"
@@ -48,6 +48,6 @@ resource "aws_db_instance" "ACS-rds" {
   parameter_group_name   = "default.mysql5.7"
   db_subnet_group_name   = aws_db_subnet_group.ACS-rds.name
   skip_final_snapshot    = true
-  vpc_security_group_ids = [aws_security_group.datalayer-sg.id]
+  vpc_security_group_ids = var.db-sg
   multi_az               = "true"
 }
