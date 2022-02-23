@@ -1,8 +1,3 @@
-variable "account_no" {
-  type        = number
-  description = "account number for the aws"
-} 
-
 variable "master-username" {
   type        = string
   description = "The master user name"

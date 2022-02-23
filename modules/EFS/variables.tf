@@ -28,6 +28,10 @@ variable "efs-tooling-root-directory" {
   description = "tooling root directory"
 }
 
+variable "account_no" {
+  type        = number
+  description = "account number for the aws"
+} 
 
 
 variable "tags" {

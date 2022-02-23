@@ -90,10 +90,6 @@ variable "tags" {
   default     = {}
 }
 
-variable "keypair" {
-  type        = string
-  description = "Keypair for instances"
-}
 
 variable "instance_type" {
   type        = string
