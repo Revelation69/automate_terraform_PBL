@@ -21,7 +21,13 @@ tags = {
 
 environment = "DEV"
 
-ami = "ami-0fb653ca2d3203ac1"
+ami-web = "ami-09df241cd2eec65b9"
+
+ami-bastion = "ami-041dda9ba00726fa3"
+
+ami-nginx = "ami-0fd5733bb5c207b57"
+
+ami-sonar = "ami-08bf4f16a51d3afaf"
 
 keypair = "EC2 Tutorial"
 

@@ -7,3 +7,13 @@
 #     encrypt        = true
 #   }
 # }
+
+terraform {
+  backend "remote" {
+    organization = "learn-terraform-now"
+
+    workspaces {
+      name = "automate_terraform_PBL"
+    }
+  }
+}
