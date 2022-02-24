@@ -3,7 +3,6 @@
 #########################
 resource "aws_s3_bucket" "terraform-state" {
   bucket = "pbl18"
-
   force_destroy = true
 
 }
