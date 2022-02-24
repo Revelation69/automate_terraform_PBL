@@ -3,45 +3,45 @@
 #---------------------------------
 
 resource "aws_lb" "ext-alb" {
-  name            = "ext-alb"
+  name            = var.ext-alb-name
   internal        = false
-  security_groups = [aws_security_group.ext-alb-sg.id]
-  subnets         = [aws_subnet.public[0].id, aws_subnet.public[1].id]
+  security_groups = [var.public-sg]
+  subnets         = [var.public-sbn-1, var.public-sbn-2]
 
   tags = {
-    Name = "ACS-EXT-ALB"
+    Name = var.ext-alb-name
   }
 
-  ip_address_type    = "ipv4"
-  load_balancer_type = "application"
+  ip_address_type    = var.ip-address-type
+  load_balancer_type = var.load-balancer-type
 }
 
 #--- create a target group for the external load balancer
 resource "aws_lb_target_group" "nginx-tgt" {
   health_check {
-    interval            = 10
-    path                = "/healthstatus"
-    protocol            = "HTTPS"
-    timeout             = 5
-    healthy_threshold   = 5
-    unhealthy_threshold = 2
+    interval            = var.interval
+    path                = var.path
+    protocol            = var.protocol
+    timeout             = var.timeout
+    healthy_threshold   = var.healthy-threshold 
+    unhealthy_threshold = var.unhealthy-threshold 
   }
   name        = "nginx-tgt"
-  port        = 443
-  protocol    = "HTTPS"
-  target_type = "instance"
-  vpc_id      = aws_vpc.main.id
+  port        = var.port
+  protocol    = var.protocol
+  target_type = var.target-type
+  vpc_id      = var.vpc-id
 }
 
 #--- create a listener for the load balancer
 resource "aws_lb_listener" "nginx-listner" {
   load_balancer_arn = aws_lb.ext-alb.arn
-  port              = 443
-  protocol          = "HTTPS"
+  port              = var.port
+  protocol          = var.protocol
   certificate_arn   = aws_acm_certificate_validation.project_terraform_validation.certificate_arn
 
   default_action {
-    type             = "forward"
+    type             = var.lb-listener-action-type
     target_group_arn = aws_lb_target_group.nginx-tgt.arn
   }
 }
@@ -51,53 +51,53 @@ resource "aws_lb_listener" "nginx-listner" {
 #---------------------------------
 
 resource "aws_lb" "int-alb" {
-  name     = "int-alb"
+  name     = var.int-alb-name
   internal = true
-  security_groups = [aws_security_group.int-alb-sg.id]
-  subnets = [aws_subnet.private[0].id, aws_subnet.private[1].id]
+  security_groups = [var.private-sg]
+  subnets = [var.private-sbn-1, var.private-sbn-2]
 
   tags = {
-    Name = "ACS-INT-ALB"
+    Name = var.int-alb-name
   }
 
-  ip_address_type    = "ipv4"
-  load_balancer_type = "application"
+  ip_address_type    = var.ip-address-type
+  load_balancer_type = var.load-balancer-type
 }
 
 # --- target group  for wordpress -------
 resource "aws_lb_target_group" "wordpress-tgt" {
   health_check {
-    interval            = 10
-    path                = "/healthstatus"
-    protocol            = "HTTPS"
-    timeout             = 5
-    healthy_threshold   = 5
-    unhealthy_threshold = 2
+    interval            = var.interval
+    path                = var.path
+    protocol            = var.protocol
+    timeout             = var.timeout
+    healthy_threshold   = var.healthy-threshold 
+    unhealthy_threshold = var.unhealthy-threshold
   }
 
   name        = "wordpress-tgt"
-  port        = 443
-  protocol    = "HTTPS"
-  target_type = "instance"
-  vpc_id      = aws_vpc.main.id
+  port        = var.port
+  protocol    = var.protocol
+  target_type = var.target-type
+  vpc_id      = var.vpc-id
 }
 
 # --- target group for tooling -------
 resource "aws_lb_target_group" "tooling-tgt" {
   health_check {
-    interval            = 10
-    path                = "/healthstatus"
-    protocol            = "HTTPS"
-    timeout             = 5
-    healthy_threshold   = 5
-    unhealthy_threshold = 2
+    interval            = var.interval
+    path                = var.path
+    protocol            = var.protocol
+    timeout             = var.timeout
+    healthy_threshold   = var.healthy-threshold 
+    unhealthy_threshold = var.unhealthy-threshold
   }
 
   name        = "tooling-tgt"
-  port        = 443
-  protocol    = "HTTPS"
-  target_type = "instance"
-  vpc_id      = aws_vpc.main.id
+  port        = var.port
+  protocol    = var.protocol
+  target_type = var.target-type
+  vpc_id      = var.vpc-id
 }
 
 # For this aspect a single listener was created for the wordpress which is default,
@@ -105,8 +105,8 @@ resource "aws_lb_target_group" "tooling-tgt" {
 
 resource "aws_lb_listener" "web-listener" {
   load_balancer_arn = aws_lb.int-alb.arn
-  port              = 443
-  protocol          = "HTTPS"
+  port              = var.port
+  protocol          = var.protocol
   certificate_arn   = aws_acm_certificate_validation.project_terraform_validation.certificate_arn
 
 
@@ -120,10 +120,10 @@ resource "aws_lb_listener" "web-listener" {
 
 resource "aws_lb_listener_rule" "tooling-listener" {
   listener_arn = aws_lb_listener.web-listener.arn
-  priority     = 99
+  priority     = var.lb-listener-priority
 
   action {
-    type             = "forward"
+    type             = var.lb-listener-action-type
     target_group_arn = aws_lb_target_group.tooling-tgt.arn
   }
 

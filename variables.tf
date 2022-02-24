@@ -53,6 +53,7 @@ variable "ami" {
   description = "AMI ID for the launch template"
 }
 
+
 variable "keypair" {
   type        = string
   description = "Key pair for the instances"
