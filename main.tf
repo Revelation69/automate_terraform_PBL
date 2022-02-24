@@ -2,7 +2,7 @@
 ##creating bucket for s3 backend
 #########################
 resource "aws_s3_bucket" "terraform-state" {
-  bucket = "pbl18"
+  bucket        = "pbl18"
   force_destroy = true
 
 }
@@ -83,12 +83,12 @@ module "Security" {
 
 module "AutoScaling" {
   source                    = "./modules/Autoscaling"
-  ami-web                   = var.ami
-  ami-bastion               = var.ami
-  ami-nginx                 = var.ami
-  desired_capacity          = 2
-  min_size                  = 2
-  max_size                  = 2
+  ami-web                   = var.ami-web
+  ami-bastion               = var.ami-bastion
+  ami-nginx                 = var.ami-nginx
+  desired_capacity          = 1
+  min_size                  = 1
+  max_size                  = 1
   web-sg                    = [module.Security.web-sg]
   bastion-sg                = [module.Security.bastion-sg]
   nginx-sg                  = [module.Security.nginx-sg]
@@ -137,9 +137,9 @@ module "RDS" {
 # The Module creates instances for jenkins, sonarqube abd jfrog
 module "compute" {
   source                       = "./modules/compute"
-  ami-jenkins                  = var.ami
-  ami-sonar                    = var.ami
-  ami-jfrog                    = var.ami
+  ami-jenkins                  = var.ami-bastion
+  ami-sonar                    = var.ami-sonar
+  ami-jfrog                    = var.ami-bastion
   subnets-compute              = module.VPC.public_subnets-1
   sg-compute                   = [module.Security.ALB-sg]
   keypair                      = var.keypair

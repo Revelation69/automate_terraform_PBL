@@ -48,11 +48,6 @@ variable "environment" {
   description = "Environment"
 }
 
-variable "ami" {
-  type        = string
-  description = "AMI ID for the launch template"
-}
-
 
 variable "keypair" {
   type        = string
