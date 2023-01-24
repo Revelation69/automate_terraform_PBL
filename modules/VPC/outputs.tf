@@ -1,11 +1,11 @@
 output "public_subnets-1" {
   value       = aws_subnet.public[0].id
-  description = "The first public subnet"
+  description = "The first public subnet in the subnets"
 }
 
 output "public_subnets-2" {
   value       = aws_subnet.public[1].id
-  description = "The first second subnet"
+  description = "The first public subnet"
 }
 
 

@@ -1,10 +1,11 @@
-variable "master-username" {
+
+variable "db-username" {
   type        = string
   description = "The master user name"
 }
 
 
-variable "master-password" {
+variable "db-password" {
   type        = string
   description = "Master password"
 }

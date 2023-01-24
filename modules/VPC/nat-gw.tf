@@ -1,5 +1,3 @@
-
-# Create Elastic IP
 resource "aws_eip" "nat_eip" {
   vpc        = true
   depends_on = [aws_internet_gateway.ig]
@@ -12,7 +10,7 @@ resource "aws_eip" "nat_eip" {
   )
 }
 
-# Create Nat-Gateway
+
 resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat_eip.id
   subnet_id     = element(aws_subnet.public.*.id, 0)
@@ -21,7 +19,7 @@ resource "aws_nat_gateway" "nat" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-NAT-%s", var.name, var.environment)
+      Name = format("%s-Nat-%s", var.name, var.environment)
     },
   )
 }

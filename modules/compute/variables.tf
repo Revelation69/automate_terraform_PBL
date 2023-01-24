@@ -7,11 +7,11 @@ variable "ami-jenkins" {
 }
 variable "ami-jfrog" {
     type = string
-    description = "ami for jfrob"
+    description = "ami for jfrog"
 }
 variable "ami-sonar" {
     type = string
-    description = "ami foir sonar"
+    description = "ami for sonar"
 }
 variable "sg-compute" {
     description = "security group for compute instances"
@@ -25,14 +25,4 @@ variable "tags" {
   description = "A mapping of tags to assign to all resources."
   type        = map(string)
   default     = {}
-}
-
-variable "instance-type-jenkins" {
-  type = string
-  description = "jenkins instance type"
-}
-
-variable "instance-type-artifact-sonar" {
-  type = string
-  description = "Instance type for artifactory & sonarqube"
 }

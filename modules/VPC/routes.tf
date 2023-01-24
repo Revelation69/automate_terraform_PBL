@@ -5,7 +5,7 @@ resource "aws_route_table" "private-rtb" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-PRIVATE-ROUTE-TABLE-%s", var.name, var.environment)
+      Name = format("%s-Private-Route-Table-%s", var.name, var.environment)
     },
   )
 }
@@ -17,12 +17,14 @@ resource "aws_route" "private-rtb-route" {
   gateway_id             = aws_nat_gateway.nat.id
 }
 
+
 # associate all private subnets to the private route table
 resource "aws_route_table_association" "private-subnets-assoc" {
   count          = length(aws_subnet.private[*].id)
   subnet_id      = element(aws_subnet.private[*].id, count.index)
   route_table_id = aws_route_table.private-rtb.id
 }
+
 
 
 # create route table for the public subnets
@@ -32,19 +34,10 @@ resource "aws_route_table" "public-rtb" {
   tags = merge(
     var.tags,
     {
-      Name = format("%s-PUBLIC-ROUTE-TABLE-%s", var.name, var.environment)
+      Name = format("%s-Public-Route-Table-%s", var.name, var.environment)
     },
   )
 }
-
-# associate all public subnets to the public route table
-resource "aws_route_table_association" "public-subnets-assoc" {
-  count          = length(aws_subnet.public[*].id)
-  subnet_id      = element(aws_subnet.public[*].id, count.index)
-  route_table_id = aws_route_table.public-rtb.id
-}
-
-
 
 # create route for the public route table and attach the internet gateway
 resource "aws_route" "public-rtb-route" {
@@ -53,4 +46,10 @@ resource "aws_route" "public-rtb-route" {
   gateway_id             = aws_internet_gateway.ig.id
 }
 
+# associate all public subnets to the public route table
+resource "aws_route_table_association" "public-subnets-assoc" {
+  count          = length(aws_subnet.public[*].id)
+  subnet_id      = element(aws_subnet.public[*].id, count.index)
+  route_table_id = aws_route_table.public-rtb.id
+}
 

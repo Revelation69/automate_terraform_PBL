@@ -9,7 +9,7 @@ resource "aws_kms_key" "ACS-kms" {
     {
       "Sid": "Enable IAM User Permissions",
       "Effect": "Allow",
-      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/admin" },
+      "Principal": { "AWS": "arn:aws:iam::${var.account_no}:user/michael" },
       "Action": "kms:*",
       "Resource": "*"
     }
@@ -24,16 +24,19 @@ resource "aws_kms_alias" "alias" {
   target_key_id = aws_kms_key.ACS-kms.key_id
 }
 
-
 # create Elastic file system
 resource "aws_efs_file_system" "ACS-efs" {
   encrypted  = true
   kms_key_id = aws_kms_key.ACS-kms.arn
 
-  tags = {
-    Name = var.efs-name
-  }
+tags = merge(
+    var.tags,
+    {
+      Name = "ACS-file-system"
+    },
+  )
 }
+
 
 # set first mount target for the EFS 
 resource "aws_efs_mount_target" "subnet-1" {
@@ -61,7 +64,7 @@ resource "aws_efs_access_point" "wordpress" {
   }
 
   root_directory {
-    path = var.efs-wordpress-root-directory
+    path = "/wordpress"
 
     creation_info {
       owner_gid   = 0
@@ -84,7 +87,7 @@ resource "aws_efs_access_point" "tooling" {
 
   root_directory {
 
-    path = var.efs-tooling-root-directory
+    path = "/tooling"
 
     creation_info {
       owner_gid   = 0

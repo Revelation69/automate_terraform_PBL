@@ -1,7 +1,8 @@
 # Get list of availability zones
-data "aws_availability_zones" "available-bastion" {
+data "aws_availability_zones" "available" {
   state = "available"
 }
+
 
 # creating sns topic for all the auto scaling groups
 resource "aws_sns_topic" "ACS-sns" {
@@ -10,7 +11,7 @@ resource "aws_sns_topic" "ACS-sns" {
 
 
 # creating notification for all the auto scaling groups
-resource "aws_autoscaling_notification" "aws_notifications" {
+resource "aws_autoscaling_notification" "david_notifications" {
   group_names = [
     aws_autoscaling_group.bastion-asg.name,
     aws_autoscaling_group.nginx-asg.name,
@@ -29,21 +30,25 @@ resource "aws_autoscaling_notification" "aws_notifications" {
 
 
 resource "random_shuffle" "az_list" {
-  input = data.aws_availability_zones.available-bastion.names
+  input = data.aws_availability_zones.available.names
 }
 
 
 # ---- Autoscaling for bastion  hosts
+
+
 resource "aws_autoscaling_group" "bastion-asg" {
   name                      = "bastion-asg"
   max_size                  = var.max_size
   min_size                  = var.min_size
-  health_check_grace_period = var.health-check-grace-period
-  health_check_type         = var.health-check-type
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
   desired_capacity          = var.desired_capacity
 
-  # Where you place in your subnet
   vpc_zone_identifier = var.public_subnets
+  
+
+
 
   launch_template {
     id      = aws_launch_template.bastion-launch-template.id
@@ -51,22 +56,24 @@ resource "aws_autoscaling_group" "bastion-asg" {
   }
   tag {
     key                 = "Name"
-    value               = "ACS-Bastion"
+    value               = "ACS-bastion"
     propagate_at_launch = true
   }
 
 }
 
 
-# ------ Autoscaling group for reverse proxy nginx ---------
+
+# ------ Autoscslaling group for reverse proxy nginx ---------
+
 resource "aws_autoscaling_group" "nginx-asg" {
   name                      = "nginx-asg"
-  max_size                  = var.max_size
+  max_size                  = 2
   min_size                  = 1
-  health_check_grace_period = var.health-check-grace-period
-  health_check_type         = var.health-check-type
+  health_check_grace_period = 300
+  health_check_type         = "ELB"
   desired_capacity          = 1
-
+  
   vpc_zone_identifier = var.public_subnets
 
 
@@ -81,10 +88,11 @@ resource "aws_autoscaling_group" "nginx-asg" {
     propagate_at_launch = true
   }
 
+
 }
 
 # attaching autoscaling group of nginx to external load balancer
 resource "aws_autoscaling_attachment" "asg_attachment_nginx" {
   autoscaling_group_name = aws_autoscaling_group.nginx-asg.id
-  lb_target_group_arn   = var.nginx-alb-tgt
+  alb_target_group_arn   = var.nginx-alb-tgt
 }

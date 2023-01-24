@@ -12,24 +12,8 @@ variable "efs-sg" {
 
 }
 
-variable "efs-name" {
-  type        = string
-  description = "efs name"
-
-}
-
-variable "efs-wordpress-root-directory" {
-  type = string
-  description = "wordpress root directory"
-}
-
-variable "efs-tooling-root-directory" {
-  type = string
-  description = "tooling root directory"
-}
-
 variable "account_no" {
-  type        = number
+  type        = string
   description = "account number for the aws"
 } 
 
