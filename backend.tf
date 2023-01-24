@@ -7,3 +7,14 @@
 #     encrypt        = true
 #   }
 # }
+
+terraform {
+  backend "remote" {
+    organization = "Revon"
+
+    workspaces {
+      name = "automate_terraform_PBL"
+    }
+  }
+
+}
