@@ -22,7 +22,6 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "first" {
 }
 
 
-
 # creating VPC
 module "VPC" {
   source                              = "./modules/VPC"
