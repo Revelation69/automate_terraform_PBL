@@ -3,7 +3,7 @@ variable "region" {
 }
 
 variable "vpc_cidr" {
-  default = "10.0.0.0/16"
+  default = "172.16.0.0/16"
 }
 
 variable "enable_dns_support" {
@@ -35,29 +35,53 @@ variable "preferred_number_of_private_subnets" {
 variable "name" {
   type    = string
   default = "ACS"
+
 }
 
 variable "tags" {
+  description = "A mapping of tags to assign to all resources."
   type        = map(string)
-  description = "A mapping of tags to assign to all resources"
   default     = {}
 }
 
 variable "environment" {
   type        = string
-  description = "Environment"
+  description = "Enviroment"
+}
+
+variable "ami-bastion" {
+  type        = string
+  description = "AMI ID for the launch template"
 }
 
 
+variable "ami-web" {
+  type        = string
+  description = "AMI ID for the launch template"
+}
+
+
+variable "ami-nginx" {
+  type        = string
+  description = "AMI ID for the launch template"
+}
+
+
+variable "ami-sonar" {
+  type        = string
+  description = "AMI ID for the launch template"
+}
+
 variable "keypair" {
   type        = string
-  description = "Key pair for the instances"
+  description = "key pair for the instances"
 }
 
 variable "account_no" {
   type        = number
   description = "the account number"
 }
+
 
 variable "master-username" {
   type        = string
