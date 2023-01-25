@@ -52,8 +52,8 @@ module "ALB" {
   ip_address_type    = "ipv4"
 }
 
-module "Security" {
-  source = "./modules/Security"
+module "security" {
+  source = "./modules/security"
   vpc_id = module.VPC.vpc_id
 }
 
