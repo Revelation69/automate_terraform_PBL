@@ -6,18 +6,31 @@ resource "aws_s3_bucket" "terraform-state" {
   bucket        = "mike-pbl18"
   force_destroy = true
 }
-resource "aws_s3_bucket_versioning" "version" {
-  bucket = aws_s3_bucket.terraform-state.id
-  versioning_configuration {
-    status = "Enabled"
+
+resource "aws_s3_bucket" "terraform_state" {
+  bucket = "pbl-test-18"
+
+  versioning {
+    enabled = true
+  }
+  force_destroy = true
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
   }
 }
-resource "aws_s3_bucket_server_side_encryption_configuration" "first" {
-  bucket = aws_s3_bucket.terraform-state.id
-  rule {
-    apply_server_side_encryption_by_default {
-      sse_algorithm = "AES256"
-    }
+
+resource "aws_dynamodb_table" "terraform_locks" {
+  name         = "terraform-locks"
+  billing_mode = "PAY_PER_REQUEST"
+  hash_key     = "LockID"
+  attribute {
+    name = "LockID"
+    type = "S"
   }
 }
 
@@ -106,6 +119,6 @@ module "compute" {
   ami-sonar       = var.ami-sonar
   ami-jfrog       = var.ami-bastion
   subnets-compute = module.VPC.public_subnets-1
-  sg-compute      = [module.security.compute-sg]
+  compute-sg      = [module.security.compute-sg]
   keypair         = var.keypair
 }
