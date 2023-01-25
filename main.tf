@@ -121,7 +121,4 @@ module "compute" {
   subnets-compute              = module.VPC.public_subnets-1
   sg-compute                   = [module.Security.ALB-sg]
   keypair                      = var.keypair
-  instance-type-jenkins        = "t2.micro"
-  instance-type-artifact-sonar = "t2.medium"
-
 }
