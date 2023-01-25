@@ -53,7 +53,7 @@ module "ALB" {
 }
 
 module "security" {
-  source = "./modules/security"
+  source = "./modules/SECURITY"
   vpc_id = module.VPC.vpc_id
 }
 
