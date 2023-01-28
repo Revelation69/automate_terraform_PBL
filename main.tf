@@ -2,10 +2,11 @@
 #creating bucket for s3 backend
 ########################
 
-resource "aws_s3_bucket_versioning" "terraform_state" {
-  bucket        = "mike-pbl18"
-  enabled = true
-  force_destroy = true
+resource "aws_s3_bucket_versioning" "versioning_example" {
+  bucket = "mike-pbl18"
+  versioning_configuration {
+    status = "Enabled"
+  }
 }
 
 resource "aws_dynamodb_table" "terraform_locks" {
