@@ -2,19 +2,11 @@
 #creating bucket for s3 backend
 ########################
 
-resource "aws_s3_bucket" "terraform-state" {
+resource "aws_s3_bucket_versioning" "terraform_state" {
   bucket        = "mike-pbl18"
+  enabled = true
   force_destroy = true
 }
-
-resource "aws_s3_bucket" "terraform_state" {
-  bucket = "pbl-test-18"
-
-  versioning {
-    enabled = true
-  }
-  force_destroy = true
-
   server_side_encryption_configuration {
     rule {
       apply_server_side_encryption_by_default {
@@ -22,7 +14,6 @@ resource "aws_s3_bucket" "terraform_state" {
       }
     }
   }
-}
 
 resource "aws_dynamodb_table" "terraform_locks" {
   name         = "terraform-locks"
