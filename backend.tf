@@ -16,5 +16,4 @@ terraform {
       name = "automate_terraform_PBL"
     }
   }
-
 }
