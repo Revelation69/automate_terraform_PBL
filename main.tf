@@ -2,10 +2,20 @@
 #creating bucket for s3 backend
 ########################
 
-resource "aws_s3_bucket_versioning" "versioning_example" {
-  bucket = "mike-pbl18"
-  versioning_configuration {
-    status = "Enabled"
+resource "aws_s3_bucket_versioning" "versioning_example"  {
+  bucket = "pbl-test-18"
+
+  versioning {
+    enabled = true
+  }
+  force_destroy = true
+
+  server_side_encryption_configuration {
+    rule {
+      apply_server_side_encryption_by_default {
+        sse_algorithm = "AES256"
+      }
+    }
   }
 }
 
