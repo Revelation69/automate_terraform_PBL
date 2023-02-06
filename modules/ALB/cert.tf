@@ -55,7 +55,7 @@ resource "aws_route53_record" "tooling" {
 # create records for wordpress
 resource "aws_route53_record" "wordpress" {
   zone_id = data.aws_route53_zone.michaeloajala.zone_id
-  name    = "wordpress.michaelajala.tk"
+  name    = "wordpress.michaeloajala.tk"
   type    = "A"
 
   alias {
